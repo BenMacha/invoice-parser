@@ -6,7 +6,7 @@
  * that is available through the world-wide-web at the following URI:
  * https://www.php.net/license/3_01.txt.
  *
- * POS developed by Ben Macha.
+ * Updated by Ben Macha.
  *
  * @category   Symfony Invoicing Parcer Project
  *
