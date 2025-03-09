@@ -19,7 +19,7 @@ final class Version20250304000000 extends AbstractMigration
     {
         $this->addSql('ALTER TABLE invoice ALTER name TYPE VARCHAR(75)');
         $this->addSql('ALTER TABLE invoice ALTER currency TYPE VARCHAR(3)');
-        $this->addSql('ALTER TABLE invoice ALTER invoice_date SET NOT NULL');
+        $this->addSql('ALTER TABLE invoice ADD invoice_date DATE NOT NULL');
 
     }
 
