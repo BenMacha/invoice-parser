@@ -29,19 +29,19 @@ use Doctrine\ORM\Mapping as ORM;
 class Invoice
 {
     #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'integer')]
-    private ?int $id = null;
+    protected int $id;
 
     #[ORM\Column(type: 'string', length: 75)]
-    private string $name;
+    protected string $name;
 
     #[ORM\Column(type: 'float')]
-    private float $amount;
+    protected float $amount;
 
     #[ORM\Column(type: 'string', length: 3)]
-    private string $currency;
+    protected string $currency;
 
     #[ORM\Column(type: 'date')]
-    private \DateTime $invoiceDate;
+    protected \DateTime $invoiceDate;
 
     public function getId(): ?int
     {
