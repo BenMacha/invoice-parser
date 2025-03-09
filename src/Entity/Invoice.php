@@ -29,7 +29,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Invoice
 {
     #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'integer')]
-    private int $id;
+    private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 75)]
     private string $name;
@@ -43,7 +43,7 @@ class Invoice
     #[ORM\Column(type: 'date')]
     private \DateTime $invoiceDate;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

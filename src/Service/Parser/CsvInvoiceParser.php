@@ -29,6 +29,9 @@ class CsvInvoiceParser implements InvoiceParserInterface
         return 'csv' === pathinfo($filePath, PATHINFO_EXTENSION);
     }
 
+    /**
+     * @return array<array{name: string, amount: float, currency: string, date: \DateTime}>
+     */
     public function parse(string $filePath): array
     {
         if (!file_exists($filePath)) {

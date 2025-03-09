@@ -25,12 +25,12 @@ namespace App\Service\Parser;
 class InvoiceParserFactory
 {
     /**
-     * @var InvoiceParserInterface[]
+     * @var array<InvoiceParserInterface>
      */
     private array $parsers;
 
     /**
-     * @param iterable $parsers List of invoice parsers
+     * @param iterable<InvoiceParserInterface> $parsers List of invoice parsers
      */
     public function __construct(iterable $parsers)
     {

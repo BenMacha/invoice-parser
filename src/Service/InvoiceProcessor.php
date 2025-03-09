@@ -61,6 +61,9 @@ class InvoiceProcessor
         }
     }
 
+    /**
+     * @param array<array{name: string, amount: float, currency: string, date: \DateTime}> $invoiceData
+     */
     private function processInvoiceData(array $invoiceData): int
     {
         $count = 0;

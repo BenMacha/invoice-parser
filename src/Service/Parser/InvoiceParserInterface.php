@@ -26,5 +26,8 @@ interface InvoiceParserInterface
 {
     public function supports(string $filePath): bool;
 
+    /**
+     * @return array<array{name: string, amount: float, currency: string, date: \DateTime}>
+     */
     public function parse(string $filePath): array;
 }

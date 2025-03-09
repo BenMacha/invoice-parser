@@ -48,6 +48,7 @@
     },
     "scripts": {
         "phpcsfixer" : "./vendor/bin/php-cs-fixer fix src --verbose --show-progress=dots --config=./config-cs.php",
+        "phpstan" : "vendor/bin/phpstan analyse src tests",
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
