@@ -2,11 +2,28 @@
 
 declare(strict_types=1);
 
+/**
+ * PHP version 8.2 & Symfony 5.4.
+ * LICENSE: This source file is subject to version 3.01 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * https://www.php.net/license/3_01.txt.
+ *
+ * POS developed by Ben Macha.
+ *
+ * @category   Symfony Invoicing Parcer Project
+ *
+ * @author     Ali BEN MECHA       <contact@benmacha.tn>
+ *
+ * @copyright  Ⓒ 2025 benmacha.tn
+ *
+ * @see       https://www.benmacha.tn
+ *
+ */
+
 namespace App\Entity;
 
 use App\Repository\InvoiceRepository;
 use Doctrine\ORM\Mapping as ORM;
-use DateTime;
 
 #[ORM\Entity(repositoryClass: InvoiceRepository::class)]
 class Invoice
@@ -24,7 +41,7 @@ class Invoice
     private string $currency;
 
     #[ORM\Column(type: 'date')]
-    private DateTime $invoiceDate;
+    private \DateTime $invoiceDate;
 
     public function getId(): int
     {
@@ -39,6 +56,7 @@ class Invoice
     public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -50,6 +68,7 @@ class Invoice
     public function setAmount(float $amount): self
     {
         $this->amount = $amount;
+
         return $this;
     }
 
@@ -61,17 +80,19 @@ class Invoice
     public function setCurrency(string $currency): self
     {
         $this->currency = $currency;
+
         return $this;
     }
 
-    public function getInvoiceDate(): DateTime
+    public function getInvoiceDate(): \DateTime
     {
         return $this->invoiceDate;
     }
 
-    public function setInvoiceDate(DateTime $invoiceDate): self
+    public function setInvoiceDate(\DateTime $invoiceDate): self
     {
         $this->invoiceDate = $invoiceDate;
+
         return $this;
     }
 }

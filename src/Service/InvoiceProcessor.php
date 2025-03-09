@@ -2,14 +2,30 @@
 
 declare(strict_types=1);
 
+/**
+ * PHP version 8.2 & Symfony 5.4.
+ * LICENSE: This source file is subject to version 3.01 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * https://www.php.net/license/3_01.txt.
+ *
+ * POS developed by Ben Macha.
+ *
+ * @category   Symfony Invoicing Parcer Project
+ *
+ * @author     Ali BEN MECHA       <contact@benmacha.tn>
+ *
+ * @copyright  Ⓒ 2025 benmacha.tn
+ *
+ * @see       https://www.benmacha.tn
+ *
+ */
+
 namespace App\Service;
 
 use App\Entity\Invoice;
 use App\Repository\InvoiceRepository;
 use App\Service\Parser\InvoiceParserFactory;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Psr\Log\LoggerInterface;
 
 class InvoiceProcessor
@@ -31,12 +47,6 @@ class InvoiceProcessor
         $this->invoiceRepository = $invoiceRepository;
     }
 
-    /**
-     *
-     * @param string $filePath
-     * @return int
-     * @throws Exception
-     */
     public function processFile(string $filePath): int
     {
         try {
@@ -44,18 +54,13 @@ class InvoiceProcessor
             $invoiceData = $parser->parse($filePath);
 
             return $this->processInvoiceData($invoiceData);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->logger->error("Failed to process invoice file: {$e->getMessage()}");
+
             throw $e;
         }
     }
 
-    /**
-     *
-     * @param array $invoiceData
-     * @return int
-     * @throws \Exception
-     */
     private function processInvoiceData(array $invoiceData): int
     {
         $count = 0;
@@ -74,15 +79,15 @@ class InvoiceProcessor
                     ->setInvoiceDate($data['date']);
 
                 $this->entityManager->persist($invoice);
-                $count++;
+                ++$count;
 
-                if ($count % $batchSize === 0) {
+                if (0 === $count % $batchSize) {
                     $this->entityManager->flush();
                     $this->entityManager->clear();
                 }
             }
 
-            if ($count % $batchSize !== 0) {
+            if (0 !== $count % $batchSize) {
                 $this->entityManager->flush();
             }
             $connection->commit();
@@ -91,6 +96,7 @@ class InvoiceProcessor
         } catch (\Exception $e) {
             $connection->rollBack();
             $this->logger->error("Transaction failed: {$e->getMessage()}");
+
             throw $e;
         }
     }
