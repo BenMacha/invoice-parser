@@ -11,17 +11,18 @@ use App\Service\Parser\InvoiceParserFactory;
 use App\Service\Parser\InvoiceParserInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 class InvoiceProcessorTest extends TestCase
 {
-    private $entityManager;
-    private $parserFactory;
-    private $parser;
-    private $logger;
-    private $invoiceRepository;
-    private $processor;
+    private MockObject $entityManager;
+    private MockObject $parserFactory;
+    private MockObject $parser;
+    private MockObject $logger;
+    private MockObject $invoiceRepository;
+    private InvoiceProcessor $processor;
 
     protected function setUp(): void
     {
