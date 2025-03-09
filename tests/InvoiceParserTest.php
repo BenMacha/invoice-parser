@@ -4,42 +4,66 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\Service\InvoiceParser;
-use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use App\Service\Parser\CsvInvoiceParser;
+use App\Service\Parser\JsonInvoiceParser;
+use PHPUnit\Framework\TestCase;
 
-class InvoiceParserTest extends KernelTestCase
+class InvoiceParserTest extends TestCase
 {
-    private $entityManager;
-
-    public function testParseJson(): void
+    public function testJsonParserSupports(): void
     {
-        $this->entityManager = $this->createMock(EntityManagerInterface::class);
+        $parser = new JsonInvoiceParser();
 
-        $connection = $this->createMock(Connection::class);
-        $this->entityManager->method('getConnection')->willReturn($connection);
-
-        $connection->expects($this->exactly(10))->method('executeStatement');
-
-        $invoiceParser = new InvoiceParser($this->entityManager);
-
-        $invoiceParser->parse('data/invoices.json');
+        $this->assertTrue($parser->supports('file.json'));
+        $this->assertFalse($parser->supports('file.csv'));
+        $this->assertFalse($parser->supports('file.txt'));
     }
 
-    public function testParseCsv(): void
+    public function testCsvParserSupports(): void
     {
-        $this->entityManager = $this->createMock(EntityManagerInterface::class);
+        $parser = new CsvInvoiceParser();
 
-        $connection = $this->createMock(Connection::class);
-        $this->entityManager->method('getConnection')->willReturn($connection);
+        $this->assertTrue($parser->supports('file.csv'));
+        $this->assertFalse($parser->supports('file.json'));
+        $this->assertFalse($parser->supports('file.txt'));
+    }
 
-        $connection->expects($this->exactly(10))->method('executeStatement');
+    public function testJsonParserParse(): void
+    {
+        $parser = new JsonInvoiceParser();
 
-        $invoiceParser = new InvoiceParser($this->entityManager);
+        // Créer un fichier json temporaire pour le test
+        $tempFile = tempnam(sys_get_temp_dir(), 'test_') . '.json';
+        $jsonContent = '[{"montant": 100.50, "devise": "EUR", "nom": "Test Name", "date": "2025-03-01"}]';
+        file_put_contents($tempFile, $jsonContent);
 
-        $invoiceParser->parse('data/invoices.csv');
+        $result = $parser->parse($tempFile);
+
+        $this->assertCount(1, $result);
+        $this->assertEquals('Test Name', $result[0]['name']);
+        $this->assertEquals(100.50, $result[0]['amount']);
+        $this->assertEquals('EUR', $result[0]['currency']);
+        $this->assertEquals('2025-03-01', $result[0]['date']->format('Y-m-d'));
+
+    }
+
+    public function testCsvParserParse(): void
+    {
+        $parser = new CsvInvoiceParser();
+
+        // Créer un fichier csv temporaire pour le test
+        $tempFile = tempnam(sys_get_temp_dir(), 'test_') . '.csv';
+        $csvContent = "100.50\tEUR\tTest Name\t2025-03-01";
+        file_put_contents($tempFile, $csvContent);
+
+        $result = $parser->parse($tempFile);
+
+        $this->assertCount(1, $result);
+        $this->assertEquals('Test Name', $result[0]['name']);
+        $this->assertEquals(100.50, $result[0]['amount']);
+        $this->assertEquals('EUR', $result[0]['currency']);
+        $this->assertEquals('2025-03-01', $result[0]['date']->format('Y-m-d'));
+
     }
 
 }
-
