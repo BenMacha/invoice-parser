@@ -23,3 +23,16 @@ services:
     App\Command\:
         resource: '../src/Command'
         tags: ['console.command']
+
+
+    # Parseurs d'invoice en CSV
+    App\Service\Parser\CsvInvoiceParser:
+        tags: ['app.invoice_parser']
+    # Parseurs d'invoice en JSON
+    App\Service\Parser\JsonInvoiceParser:
+        tags: ['app.invoice_parser']
+
+    # Factory de parseurs
+    App\Service\Parser\InvoiceParserFactory:
+        arguments:
+            $parsers: !tagged_iterator app.invoice_parser
